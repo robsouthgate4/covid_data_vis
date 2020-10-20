@@ -23,8 +23,8 @@ export default class GridItem extends Mesh {
 		
 		geometry.setAttribute( 'morphPosition', 	new BufferAttribute( morphPosiitons, 3 ) );
 		geometry.setAttribute( 'morphNormal', 		new BufferAttribute( morphNormals, 3 ) );
-		
-		geometry.morphTargetsRelative = false;
+
+		geometry.computeBoundingSphere();
 
 		super( geometry, material );
 

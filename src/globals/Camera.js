@@ -47,14 +47,6 @@ class Camera extends PerspectiveCamera {
 
 	handleGridItemClicked( object ) {
 
-		// const { position } = object;
-
-		// const newPos = object.getWorldPosition();
-		// newPos.z += 3;
-		// newPos.y += 1;
-
-		// this.newPos = newPos;		
-
 	}
 
 	handleInitialUpdateComplete( object ) {
@@ -63,20 +55,19 @@ class Camera extends PerspectiveCamera {
 		newPos.z += 12;
 		newPos.y += 1;
 
-		//this.newPos = newPos;		
-
 	}
 
 	onMouseMove( evt ) {
 
-		this.mouse = evt;
 	}
 
-	update ( data ) {
+	update ( data ) {	
+
+		if ( !this.mouse.normalized ) return;
 
 		const positionValue = new Vector3().lerpVectors( this.position, this.newPos, 0.02 );
 
-		this.position.set( positionValue.x, positionValue.y, positionValue.z );
+		this.position.set( this.targetPositionX , positionValue.y, positionValue.z );
 
 	}
 
