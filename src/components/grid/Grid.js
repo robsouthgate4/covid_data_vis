@@ -1,7 +1,9 @@
-import {Math as Math3, ShaderMaterial, InstancedBufferAttribute, DynamicDrawUsage, BufferAttribute, Euler, Raycaster, Vector2, Object3D, Vector3 } from "three";
+import {Math as Math3, Raycaster, Vector2, Object3D } from "three";
 
 import Emitter 		from "Common/Emitter";
 import State 		from "Globals/State";
+import Scene 		from "Globals/Scene";
+import Camera 		from "Globals/Camera";
 import GridItem		from "./GridItem";
 
 export default class Grid extends Object3D {
@@ -20,6 +22,7 @@ export default class Grid extends Object3D {
 		Emitter.on( "griditemhover", this.handleGridItemHover.bind( this ) );
 		Emitter.on( "griditemclick", this.handleGridItemClick.bind( this ) );
 		Emitter.on( "griditemout",   this.handleGridItemOut.bind( this ) );
+		Emitter.on( "mousemove", 	 this.handleGlobalMouseMove.bind( this ) );
 
 		window.addEventListener( "mousedown", this.handleTouch.bind( this ) );
 
@@ -51,12 +54,14 @@ export default class Grid extends Object3D {
 		this.targetRotationOnMouseDown = 0;
 
 		this.mouseHasBeenDown = false;
+		this.hovering 		= false;
+
+		this.intersected;
 
 	}	
 
 	handleGridItemHover( object ) {
 
-		//document.body.style.cursor = "pointer";
 
 	}
 
@@ -130,6 +135,37 @@ export default class Grid extends Object3D {
 
 		this.mouseX = evt.clientX - window.innerWidth / 2;
 		this.targetRotation = this.targetRotationOnMouseDown + ( this.mouseX - this.mouseXOnMouseDown ) * 0.002;
+
+		
+	}
+
+	handleGlobalMouseMove( mouse ) {
+
+		this.raycaster.setFromCamera( mouse.normalized || new Vector2( 0, 0 ), Camera );
+
+		var intersection = this.raycaster.intersectObjects( this.gridItems );
+
+		let hoveredObject;
+
+		if ( intersection.length > 0 ) {		
+				
+
+			hoveredObject = intersection[ 0 ].object;			
+
+			if ( ! this.hovering ) {
+
+				Emitter.emit( "griditemhover", hoveredObject );
+
+			}			
+
+			this.hovering = true;
+
+		} else {		
+
+			this.hovering = false;
+
+		}
+
 
 	}
 

@@ -66,6 +66,7 @@ export default class GridItem extends Mesh {
 		}, 1000 / 30 );
 
 		this.intialScale = 0;
+		this.newHoverValue = 0;
 
 		setTimeout( () => { this.intialScale = 0.6; }, 1000 );
  
@@ -103,48 +104,34 @@ export default class GridItem extends Mesh {
 
 	}
 
+	handleHover() {
+
+		this.material.uniforms.hoverValue.value = 1;
+
+	}
+
+	handleOut() {
+
+		this.material.uniforms.hoverValue.value = 0;
+
+	}
+
 	update( { delta } ) {
 
 		this.rotation.x += 0.1 * delta;
 		this.rotation.z += 0.1 * delta;
 
-		let newScale 		= this.intialScale;
-		let newHoverValue	= 0;
+		this.newScale		= this.intialScale;
 
-		this.raycaster.setFromCamera( this.mouse || new Vector2( 0, 0 ), Camera );
-
-		var intersection = this.raycaster.intersectObject( this );
-
-		if ( intersection.length > 0 ) {
-
-			const hoveredObject = intersection[ 0 ].object;
-
-			newScale 		= 0.7;
-			newHoverValue 	= 1;
-
-			if ( !this.hovering ) {
-
-				Emitter.emit( "griditemhover", hoveredObject );
-
-			}			
-
-			this.hovering = true;
-
-		} else {
-
-			this.hovering = false;
-
-		}
-
-		const scaleValue = new Vector3().lerpVectors( this.scale, new Vector3().setScalar( newScale ), 0.04 );
+		const scaleValue = new Vector3().lerpVectors( this.scale, new Vector3().setScalar( this.newScale ), 0.04 );
 		this.scale.set( scaleValue.x, scaleValue.y, scaleValue.z );
 
-		const hoverValue = Math3.lerp( this.material.uniforms.hoverValue.value, newHoverValue, 0.04 );
+		//const hoverValue = Math3.lerp( this.material.uniforms.hoverValue.value, this.newHoverValue, 0.04 );
 
 		const dataSet = State.data[ this.userData.boroughId ];		
 		
 		this.material.uniforms.covidValue.value = dataSet[ this.currentDay ].total_cases / State.totalCasesHigh;
-		this.material.uniforms.hoverValue.value = hoverValue;
+		//this.material.uniforms.hoverValue.value = hoverValue;
 
 
 	}

@@ -72,8 +72,6 @@ class PostProcess {
 
         console.log( "resize" );
 
-        Renderer.setSize( window.innerWidth, window.innerHeight );
-
         this.renderPass.resize( window.innerWidth, window.innerHeight );
         this.blurXPass.resize( window.innerWidth, window.innerHeight );
         this.blurYPass.resize( window.innerWidth, window.innerHeight );

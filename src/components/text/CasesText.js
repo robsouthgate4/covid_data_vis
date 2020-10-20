@@ -9,7 +9,7 @@ export default class CasesText extends MSDFMesh {
 
 	constructor() {
 
-		const width = 1000;
+		const width = 400;
 
 		super( { 
 			texture: AssetManager.get( assets.atlas.roboto ),
