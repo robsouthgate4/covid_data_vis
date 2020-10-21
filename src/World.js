@@ -28,11 +28,8 @@ export default class World extends Base {
         this.grid;       
 
         this.currentDay = 0;
-        
-        this.addLights();
 
         Emitter.on( "stateloaded",          this.handleDataLoaded.bind( this ) );
-        Emitter.on( "griditemhover",        this.handleGridItemHover.bind( this ) );
         Emitter.on( "globaldateupdate",     this.handleDataUpdate.bind( this ) );
         
 
@@ -41,12 +38,6 @@ export default class World extends Base {
     handleDataUpdate( day ) {
 
         this.currentDay = day;
-
-    }
-
-    handleGridItemHover( object ) {
-
-        
 
     }
 
@@ -70,12 +61,7 @@ export default class World extends Base {
         this.scene.add( this.dayText, this.infoText, this.casesText );
 
     }
-
-    addLights() {
-
-      
-
-    }
+    
 
     resize() {
 
@@ -114,7 +100,7 @@ export default class World extends Base {
 
     }
 
-    lateUpdate( elapsedTime, delta ) {
+    lateUpdate( elapsedTime, delta ) {        
 
         super.lateUpdate( elapsedTime, delta );
 

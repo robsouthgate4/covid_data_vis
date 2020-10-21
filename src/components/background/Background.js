@@ -24,11 +24,11 @@ export default class Background extends Mesh {
 
 		super( Triangle, material );
 
-		this.renderOrder = -10000
+		this.renderOrder = -10000;
 
-		this.frustumCulled = false
+		this.frustumCulled = false;
 
-		this.matrixAutoUpdate = false
+		this.matrixAutoUpdate = false;
 
 	}
 

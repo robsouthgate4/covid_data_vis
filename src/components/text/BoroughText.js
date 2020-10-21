@@ -29,14 +29,7 @@ export default class BoroughText extends MSDFMesh {
 
         this.rotation.x = Math.PI;
 		
-		Emitter.on( "globaldateupdate", this.handleDayUpdate.bind( this ) );
 		Emitter.on( "griditemhover", 	this.handleGridItemHover.bind( this ) );
-
-	}
-
-	handleDayUpdate( day ) {
-
-
 
 	}
 

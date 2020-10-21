@@ -24,17 +24,15 @@ export default class GridItem extends Mesh {
 		geometry.setAttribute( 'morphPosition', 	new BufferAttribute( morphPosiitons, 3 ) );
 		geometry.setAttribute( 'morphNormal', 		new BufferAttribute( morphNormals, 3 ) );
 
-		geometry.computeBoundingSphere();
-
 		super( geometry, material );
 
 		this.scale.setScalar( 0 );
 
-		Emitter.on( "update", 		this.update.bind( this ) );
-		Emitter.on( "mousemove", 	this.handleMouseMove.bind( this ) );
-		Emitter.on( "touch",		this.handleTouch.bind( this ) );
-		Emitter.on( "touchend",		this.handleTouchEnd.bind( this ) );
-		Emitter.on( "wheel",		this.handleWheel.bind( this ) );
+		Emitter.on( "update", 		 this.update.bind( this ) );
+		Emitter.on( "mousemove", 	 this.handleMouseMove.bind( this ) );
+		Emitter.on( "touch",		 this.handleTouch.bind( this ) );
+		Emitter.on( "touchend",		 this.handleTouchEnd.bind( this ) );
+		Emitter.on( "wheel",		 this.handleWheel.bind( this ) );
 
 		this.raycaster  = new Raycaster();
 
@@ -67,6 +65,7 @@ export default class GridItem extends Mesh {
 
 		this.intialScale = 0;
 		this.newHoverValue = 0;
+		this.hovered = false;
 
 		setTimeout( () => { this.intialScale = 0.6; }, 1000 );
  
@@ -104,15 +103,15 @@ export default class GridItem extends Mesh {
 
 	}
 
-	handleHover() {
+	handleHover( gridItem ) {
 
-		this.material.uniforms.hoverValue.value = 1;
+		this.hovered = true;
 
 	}
 
 	handleOut() {
 
-		this.material.uniforms.hoverValue.value = 0;
+		this.hovered = false;
 
 	}
 
@@ -123,6 +122,16 @@ export default class GridItem extends Mesh {
 
 		this.newScale		= this.intialScale;
 
+		if ( this.hovered ) { 
+
+			this.newScale = this.intialScale * 1.1 
+
+		} else {
+
+			this.newScale = this.intialScale
+
+		}
+
 		const scaleValue = new Vector3().lerpVectors( this.scale, new Vector3().setScalar( this.newScale ), 0.04 );
 		this.scale.set( scaleValue.x, scaleValue.y, scaleValue.z );
 
@@ -131,7 +140,8 @@ export default class GridItem extends Mesh {
 		const dataSet = State.data[ this.userData.boroughId ];		
 		
 		this.material.uniforms.covidValue.value = dataSet[ this.currentDay ].total_cases / State.totalCasesHigh;
-		//this.material.uniforms.hoverValue.value = hoverValue;
+		
+		this.material.uniforms.hoverValue.value = this.hoverValue;
 
 
 	}

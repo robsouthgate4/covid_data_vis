@@ -180,11 +180,11 @@ export default class Base {
 
 		this.update( this.elapsed, delta );
 
-		//this.lateUpdate( this.elapsed, delta );
+		this.lateUpdate( this.elapsed, delta );
 		
 		if ( this.isRunning ) {
 
-			this.requestFrame = requestAnimationFrame( this.run.bind( this ) );
+			this.requestFrame = requestAnimationFrame( this.run.bind( this ) );			
 
 		}
 

@@ -18,10 +18,7 @@ export default class Grid extends Object3D {
 
 		//this.rotateX( Math3.degToRad( -60 ) );
 
-		Emitter.on( "update", 		 this.update.bind( this ) );		
-		Emitter.on( "griditemhover", this.handleGridItemHover.bind( this ) );
-		Emitter.on( "griditemclick", this.handleGridItemClick.bind( this ) );
-		Emitter.on( "griditemout",   this.handleGridItemOut.bind( this ) );
+		Emitter.on( "update", 		 this.update.bind( this ) );
 		Emitter.on( "mousemove", 	 this.handleGlobalMouseMove.bind( this ) );
 
 		window.addEventListener( "mousedown", this.handleTouch.bind( this ) );
@@ -57,47 +54,11 @@ export default class Grid extends Object3D {
 		this.hovering 		= false;
 
 		this.intersected;
+		this.pickerPosition = { x: 0, y: 0 };
 
-	}	
+		setInterval( () => { this.runRaycast() }, 1000 / 5 );
 
-	handleGridItemHover( object ) {
-
-
-	}
-
-	handleGridItemOut( object ) {
-
-		
-
-	}
-
-	handleGridItemClick( object ) {
-
-		this.clickedItemId = object.userData.boroughId;
-
-		for ( let i = 0; i < this.gridItems.length; i++ ) {
-
-			const gridItem = this.gridItems[ i ];
-
-			
-
-			if ( this.clickedItemId != gridItem.userData.boroughId ) {
-
-				gridItem.material.uniforms.opacity.value = 0;
-				
-				gridItem.userData.active = false;
-
-				this.clicked = false;
-
-			} else {
-
-				gridItem.userData.active = true;
-
-			}
-
-		}
-
-		this.clicked = true;
+		this.lastPickedObject;
 
 	}
 
@@ -105,14 +66,15 @@ export default class Grid extends Object3D {
 
 		this.mouseDown = true;
 
-		window.addEventListener( "mousemove", this.handleMouseMove.bind( this ), false );
-		window.addEventListener( "mouseup", this.handleTouchEnd.bind( this ), false );
+		window.addEventListener( "mousemove", 	this.handleMouseMove.bind( this ), false );
+		window.addEventListener( "mouseup", 	this.handleTouchEnd.bind( this ), false );
 
 		this.mouseXOnMouseDown = evt.clientX - window.innerWidth / 2;
 
 		this.targetRotationOnMouseDown = this.targetRotation;
 
-		this.mouseHasBeenDown = true;		
+		this.mouseHasBeenDown = true;	
+		
 
 	}
 
@@ -141,31 +103,7 @@ export default class Grid extends Object3D {
 
 	handleGlobalMouseMove( mouse ) {
 
-		this.raycaster.setFromCamera( mouse.normalized || new Vector2( 0, 0 ), Camera );
-
-		var intersection = this.raycaster.intersectObjects( this.gridItems );
-
-		let hoveredObject;
-
-		if ( intersection.length > 0 ) {		
-				
-
-			hoveredObject = intersection[ 0 ].object;			
-
-			if ( ! this.hovering ) {
-
-				Emitter.emit( "griditemhover", hoveredObject );
-
-			}			
-
-			this.hovering = true;
-
-		} else {		
-
-			this.hovering = false;
-
-		}
-
+		this.pickerPosition = mouse.normalized;
 
 	}
 
@@ -197,7 +135,35 @@ export default class Grid extends Object3D {
 
 	}
 
-	update( { elapsed, delta } ) {
+	runRaycast() {
+
+		this.raycaster.setFromCamera( this.pickerPosition, Camera );
+		
+		const intersectedObjects = this.raycaster.intersectObjects( this.gridItems );
+
+		
+
+		if ( intersectedObjects.length ) {			
+			
+			this.pickedObject = intersectedObjects[0].object;
+
+			if ( this.pickedObject ) {
+
+				Emitter.emit( "griditemhover", this.pickedObject );
+
+				this.pickedObject = null;
+
+			} else {
+	
+				this.pickedObject = null;
+	
+			}
+
+		}
+
+	}
+
+	update( { elapsed, delta } ) {		
 
 		if ( this.mouseHasBeenDown ) {
 

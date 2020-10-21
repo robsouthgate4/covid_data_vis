@@ -29,6 +29,8 @@ for  (var i=rawCovidData.length-1; i>=0; i--) {
 
 const covidData = Utils.GroupBy( rawCovidData, "area_code" );
 
+console.log( covidData );
+
 State.data              = covidData;
 State.totalCasesHigh    = highest;
 State.totalCasesLow     = lowest;
