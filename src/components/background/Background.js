@@ -12,7 +12,7 @@ export default class Background extends Mesh {
 		const uniforms = {
 
 			aspect: { value: window.innerWidth / window.innerHeight },
-			color1: { value: new Color( 0x050528 ) },
+			color1: { value: new Color( 'rgb( 245, 255, 255 )' ) },
 			color2: { value: new Color( 0x281146 ) }
 
 		}
