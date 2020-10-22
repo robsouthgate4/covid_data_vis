@@ -112,9 +112,7 @@ export default class Grid extends Object3D {
 		let i = 0;
 
 		const arr = Object.entries( this.data );
-		for (const [ key, value ] of arr ) {
-
-			i ++;
+		for (const [ key, value ] of arr ) {			
  
 			const gridItem = new GridItem();
 
@@ -122,14 +120,16 @@ export default class Grid extends Object3D {
 			gridItem.userData.covidDays	= value;
 			gridItem.userData.areaName 	= value[ 0 ].area_name;
 			gridItem.userData.info      = value;
-
-			const theta = ( i / ( this.count - 1 ) ) * ( 2 * Math.PI );
+ 
+			const theta = ( i / ( this.count ) ) * ( 2 * Math.PI );
 			
 			gridItem.position.set(  Math.cos( theta ) * this.radius, 0, Math.sin( theta ) * this.radius );
 
 			this.gridItems.push( gridItem );
 			
 			this.add( gridItem );
+
+			i ++;
 
 		}
 

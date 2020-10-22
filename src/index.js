@@ -8,34 +8,26 @@ import State        from "Globals/State";
 import World        from "./World";
 import Emitter      from "Common/Emitter"
 
+import _            from "lodash"
+
 import rawCovidData from "Assets/data/phe_cases_london_boroughs.json";
 import Utils        from "Common/Utils";
 
 var lowest = Number.POSITIVE_INFINITY;
 var highest = Number.NEGATIVE_INFINITY;
 
-var tmp;
 
-for  (var i=rawCovidData.length-1; i>=0; i--) {
+const max = _.maxBy( rawCovidData, 'total_cases');
 
-    tmp = rawCovidData[ i ].total_cases;
-
-    if (tmp < lowest) lowest = tmp;
-    
-    if (tmp > highest) highest = tmp;
-
-}
-
+console.log( max.total_cases )
 
 const covidData = Utils.GroupBy( rawCovidData, "area_code" );
 
-console.log( covidData );
 
 State.data              = covidData;
-State.totalCasesHigh    = highest;
+State.totalCasesHigh    = 1482;
 State.totalCasesLow     = lowest;
 State.total             = Object.entries( covidData ).length;
-
 AssetManager.load( { renderer: Renderer } ).then( () => {
 
     const world = new World();

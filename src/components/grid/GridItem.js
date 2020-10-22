@@ -135,11 +135,12 @@ export default class GridItem extends Mesh {
 		const scaleValue = new Vector3().lerpVectors( this.scale, new Vector3().setScalar( this.newScale ), 0.04 );
 		this.scale.set( scaleValue.x, scaleValue.y, scaleValue.z );
 
-		//const hoverValue = Math3.lerp( this.material.uniforms.hoverValue.value, this.newHoverValue, 0.04 );
 
-		const dataSet = State.data[ this.userData.boroughId ];		
-		
-		this.material.uniforms.covidValue.value = dataSet[ this.currentDay ].total_cases / State.totalCasesHigh;
+		const dataSet = this.userData.covidDays[ this.currentDay ];
+
+		const normalized = dataSet.total_cases / State.totalCasesHigh;
+
+		this.material.uniforms.covidValue.value = normalized;
 		
 		this.material.uniforms.hoverValue.value = this.hoverValue;
 

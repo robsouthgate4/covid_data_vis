@@ -4,7 +4,7 @@ attribute vec3 morphPosition;
 attribute vec3 morphNormal;
 
 uniform float time;
-uniform float covidValue;
+uniform highp float covidValue;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
