@@ -1,3 +1,5 @@
+![alt text](https://user-images.githubusercontent.com/4989948/96711934-3cbd6780-1396-11eb-92d6-1a3f3fde7cdb.png)
+
 ### Installation
 
 npm install
